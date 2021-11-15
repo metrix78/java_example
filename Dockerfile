@@ -1,16 +1,23 @@
 FROM gradle:7.3-jdk11-alpine AS build
-COPY --chown=gradle:gradle . /home/gradle/src
-WORKDIR /home/gradle/src
-RUN gradle build --no-daemon 
+ENV APP_HOME=/usr/app/
+WORKDIR $APP_HOME
+COPY build.gradle settings.gradle gradlew $APP_HOME
+COPY gradle $APP_HOME/gradle
+RUN ./gradlew build --no-daemon || return 0
+
+COPY . .
+RUN ./gradlew build
 
 FROM openjdk:11-jre-slim
 
+ENV APP_HOME=/usr/app/
+WORKDIR $APP_HOME
+
 EXPOSE 8080
 
-RUN mkdir /app
+ENV APP_HOME=/usr/app/
+WORKDIR $APP_HOME
 
-#COPY --from=build /home/gradle/src/build/libs/*.jar /app/spring-boot-application.jar
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/
+COPY --from=build $APP_HOME/build/libs/*.jar /app/
 
-#ENTRYPOINT ["java", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-Djava.security.egd=file:/dev/./urandom","-jar","/app/demo-0.0.1-SNAPSHOT.jar"]
 ENTRYPOINT ["java","-jar","/app/demo-0.0.1-SNAPSHOT.jar"]
