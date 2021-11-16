@@ -7,20 +7,24 @@
 How I would configure routes in other frameworks:
 
 GET -> route 'item/#{id}/'
-  201 (return ID)
+  200 (return ID)
   404 
   
-POST -> route 'item/#{id}/'
-MarkItemComplete (ID)
+POST -> route 'item/'
+  201 return ID
+  404 
+
+PUT -> route 'item/#{id}/'
   200 return ID
   404 
 
+
 DELETE -> route 'item/#{id}/'
 DeleteItem (ID)
-  201 (return ID)
+  200 (return ID)
   404
 
 GET -> route 'items/'
-  201 (return ID)
+  200 (return ID)
   404 
   
