@@ -1,11 +1,10 @@
 
-Useful HTTP response codes
+#Useful HTTP response codes
 200 OK
 201 Created
 404 Not Found
 
-#How I would configure routes
-#in other frameworks:
+How I would configure routes in other frameworks:
 
 route 'addItem/#{id}/'
 AddItem (string)
